@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: Registry-Server-001
+  security: #启用身份认证，其中用户名密码在其他java服务连接、注册到本服务时用到
+    basic:
+      enabled: true
+    user:
+      name: user
+      password: 123456
+
+server:
+  port: 8800 #服务注册中心端口号
+
+# https://www.cnblogs.com/fangfuhai/p/7070325.html
+eureka:
+  server:
+    enable-self-preservation: false # 自我保护 关闭保护机制，以确保注册中心将不可用的实例正确剔除
+    renewal-percent-threshold: 0.49
+    eviction-interval-timer-in-ms: 5000 # 清理失效服务的间隔（毫秒）
+  instance:
+    hostname: 127.0.0.1 #服务注册中心IP地址 (当前服务实例ip)
+    preferIpAddress: true
+  client:
+    registerWithEureka: false #是否向服务注册中心注册自己
+    fetchRegistry: false #是否检索服务
+    serviceUrl: #服务注册中心的配置内容，指定服务注册中心的位置
+      defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}/eureka/
+
+
+
